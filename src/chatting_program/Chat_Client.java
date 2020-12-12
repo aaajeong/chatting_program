@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.net.*;
 import java.io.*;
+import javax.swing.*;
 
 public class Chat_Client extends Frame implements ActionListener {
 
@@ -34,9 +35,9 @@ public class Chat_Client extends Frame implements ActionListener {
 		cardLayout = new CardLayout();
 		setLayout(cardLayout);
 		Panel loginPanel = new Panel();
-		loginPanel.setLayout(new BorderLayout());
+		loginPanel.setLayout(new FlowLayout());
 		
-		loginPanel.add("North", new Label("Input the Id"));
+		loginPanel.add(new Label("Ip 주소와 ID를 입력하세요"));
 		
 		// IP 입력 패널 
 		Panel ipPanel = new Panel();
@@ -52,19 +53,25 @@ public class Chat_Client extends Frame implements ActionListener {
 		idTF = new TextField(20);		// id 입력 
 		idPanel.add(idLabel);
 		idPanel.add(idTF);
-//		idTF.addActionListener(this);
+		idTF.addActionListener(this);
 		
 		// login 버튼 
 		login = new Button("확인");
-		login.addActionListener(this);
+//		login.addActionListener(this); 
 		
-		Panel inputPanel = new Panel();
-		inputPanel.setLayout(null);
-		inputPanel.add("Center", ipPanel);
-		inputPanel.add("Center", idPanel);
-		inputPanel.add("Center", login);
+//		Panel inputPanel = new Panel();
+//		inputPanel.setLayout(null);
+//		inputPanel.add(ipPanel);
+//		inputPanel.add(idPanel);
+//		inputPanel.add(login);
+//		loginPanel.add(inputPanel);
 		
-		add("login", loginPanel);
+		loginPanel.add(ipPanel);
+		loginPanel.add(idPanel);
+		loginPanel.add(login);
+		
+//		add(loginPanel);
+		this.add(loginPanel);
 		Panel main = new Panel();
 		main.setLayout(new BorderLayout());
 		
@@ -80,7 +87,8 @@ public class Chat_Client extends Frame implements ActionListener {
 		try {
 			// 서버에 접속하기 위해 socket 생성 
 			// outputStream은 PrintWriter, inputStream은 BufferredReader 
-			sock = new Socket(ip, 45445);
+			sock = new Socket();
+			sock.connect(new InetSocketAddress(ip, 9991));
 			pw = new PrintWriter(new OutputStreamWriter(sock.getOutputStream()));
 			br = new BufferedReader(new InputStreamReader(sock.getInputStream()));
 
@@ -92,7 +100,7 @@ public class Chat_Client extends Frame implements ActionListener {
 
 		}
 
-		setSize(500, 500);
+		setSize(440, 700);
 
 		cardLayout.show(this, "login");
 
@@ -134,7 +142,8 @@ public class Chat_Client extends Frame implements ActionListener {
 			System.exit(1);
 
 		}
-		new Chat_Client("localhost");
+		System.out.println(args[0]);
+		new Chat_Client(args[0]);
 	}
 
 	/******************************************************
@@ -149,8 +158,16 @@ public class Chat_Client extends Frame implements ActionListener {
 
 		// 아이디 입력 창으로부터 아이디를 입력받으면 
 		// 서버로부터 문자열을 받아 TextArea에 추가하는 WinInputThread를 생성한 후 실행 
+		String id = idTF.getText();
+		String ip = ipTF.getText();
+		
+		if (e.getSource() == login) {
+			if (id.length() == 0 || ip.length() == 0) {		// id, ip 입력되지 않았을때 
+				JOptionPane.showMessageDialog(null, "아이디와 ip주소를 입력 하셔야 됩니다.", "아이디나 비번을 입력!", JOptionPane.DEFAULT_OPTION);
+				return;
+			}
+		}
 		if (e.getSource() == idTF) {
-			String id = idTF.getText();
 			if (id == null || id.trim().equals("")) {
 				System.out.println("Input the Id");
 				return;

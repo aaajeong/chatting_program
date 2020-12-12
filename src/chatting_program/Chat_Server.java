@@ -32,7 +32,8 @@ public class Chat_Server extends javax.swing.JFrame {
 		// 서버 소켓 생성하기 
 		try {
 			//TextArea 객체인 display에 문구를 추가합니다
-            ServerSocket serversock = new ServerSocket(45445);
+            ServerSocket serversock = new ServerSocket();
+            serversock.bind(new InetSocketAddress("192.168.35.97", 9991));
             display.append(" Waiting Connect...");
             display.append("\n");
             System.out.println("접속을 기다립니다.");	//콘솔창에 
