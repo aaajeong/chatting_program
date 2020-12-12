@@ -8,9 +8,8 @@ import javax.swing.*;
 
 public class Chat_Client extends Frame implements ActionListener {
 
-	private TextField idTF = null;
-	private TextField ipTF = null;
-	private Button login = null;
+	private JTextField idTF = null;
+	private JButton login = null;
 	private TextField input = null;
 	private TextArea display = null;
 	private CardLayout cardLayout = null;
@@ -34,44 +33,61 @@ public class Chat_Client extends Frame implements ActionListener {
 		super("Chat Client");
 		cardLayout = new CardLayout();
 		setLayout(cardLayout);
-		Panel loginPanel = new Panel();
-		loginPanel.setLayout(new FlowLayout());
+//		JPanel loginPanel = new JPanel();
+        ImageIcon icon = new ImageIcon(Chat_Client.class.getResource("../img/login.png"));
+
+		JPanel loginPanel = new JPanel() {
+            public void paintComponent(Graphics g) {
+                // Approach 1: Dispaly image at at full size
+                g.drawImage(icon.getImage(), 0, 0, null);
+                // Approach 2: Scale image to size of component
+                // Dimension d = getSize();
+                // g.drawImage(icon.getImage(), 0, 0, d.width, d.height, null);
+                // Approach 3: Fix the image position in the scroll pane
+                // Point p = scrollPane.getViewport().getViewPosition();
+                // g.drawImage(icon.getImage(), p.x, p.y, null);
+                setOpaque(false); //그림을 표시하게 설정,투명하게 조절
+                super.paintComponent(g);
+            }
+        };
+		
+		
+//		loginPanel.setLayout(new FlowLayout());
+        loginPanel.setLayout(null);
 		
 		loginPanel.add(new Label("Ip 주소와 ID를 입력하세요"));
 		
-		// IP 입력 패널 
-		Panel ipPanel = new Panel();
-		Label ipLabel = new Label("IP 주소 : ");
-		ipTF = new TextField(20);		// ip 입력 
-		ipPanel.add(ipLabel);
-		ipPanel.add(ipTF);
-//		ipTF.addActionListener(this);	
-		
 		// ID 입력 패널 
-		Panel idPanel = new Panel();
-		Label idLabel = new Label("ID : ");
-		idTF = new TextField(20);		// id 입력 
-		idPanel.add(idLabel);
-		idPanel.add(idTF);
+//		Panel idPanel = new Panel();
+//		Label idLabel = new Label("ID : ");
+		idTF = new JTextField(20);		// id 입력 
+//		idLabel.setBounds(200, 30, 50, 50);
+//		idTF.setBounds(260, 500, 50, 50);
+//		idPanel.add(idLabel);
+//		idPanel.add(idTF);
 		idTF.addActionListener(this);
 		
 		// login 버튼 
-		login = new Button("확인");
-//		login.addActionListener(this); 
+		login = new JButton();
+		login.setBounds(100, 400, 250, 70);
+		login.addActionListener(this); 
 		
-//		Panel inputPanel = new Panel();
-//		inputPanel.setLayout(null);
-//		inputPanel.add(ipPanel);
-//		inputPanel.add(idPanel);
-//		inputPanel.add(login);
-//		loginPanel.add(inputPanel);
-		
-		loginPanel.add(ipPanel);
-		loginPanel.add(idPanel);
+		idTF.setBounds(150, 330, 200, 60);
+		loginPanel.add(idTF);
 		loginPanel.add(login);
 		
-//		add(loginPanel);
-		this.add(loginPanel);
+		// 아이디 창 투명도, 컬러 설정 
+		idTF.setOpaque(false);
+		idTF.setForeground(Color.DARK_GRAY);
+		idTF.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+		
+		// login 버튼 투명도 설정 
+		login.setBorderPainted(false);
+		login.setFocusPainted(false);
+		login.setContentAreaFilled(false);
+		
+		
+		this.add("login", loginPanel);
 		Panel main = new Panel();
 		main.setLayout(new BorderLayout());
 		
@@ -134,6 +150,7 @@ public class Chat_Client extends Frame implements ActionListener {
 		setVisible(true);
 	}
 
+
 	public static void main(String[] args) {
 
 		if (args.length != 1) {
@@ -159,23 +176,19 @@ public class Chat_Client extends Frame implements ActionListener {
 		// 아이디 입력 창으로부터 아이디를 입력받으면 
 		// 서버로부터 문자열을 받아 TextArea에 추가하는 WinInputThread를 생성한 후 실행 
 		String id = idTF.getText();
-		String ip = ipTF.getText();
+//		String ip = ipTF.getText();
 		
-		if (e.getSource() == login) {
-			if (id.length() == 0 || ip.length() == 0) {		// id, ip 입력되지 않았을때 
-				JOptionPane.showMessageDialog(null, "아이디와 ip주소를 입력 하셔야 됩니다.", "아이디나 비번을 입력!", JOptionPane.DEFAULT_OPTION);
-				return;
-			}
-		}
-		if (e.getSource() == idTF) {
+		if (e.getSource() == idTF || e.getSource() == login) {
 			if (id == null || id.trim().equals("")) {
 				System.out.println("Input the Id");
+				JOptionPane.showMessageDialog(null, "아이디를 입력 하셔야 됩니다.", "아이디 입력", JOptionPane.DEFAULT_OPTION);
 				return;
 			}
 
 			// 서버로 입력받은 id 전송
 			pw.println(id.trim());
 			pw.flush();
+			
 			// 서버로부터 입력받은 문자열 출력하는 입력 스레드 생성 
 			WinInputThread wit = new WinInputThread(sock, br);
 			wit.start();
