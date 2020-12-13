@@ -5,6 +5,7 @@ import java.awt.event.*;
 import java.net.*;
 import java.io.*;
 import javax.swing.*;
+import java.nio.*;
 
 public class Chat_Client extends Frame implements ActionListener {
 
@@ -124,7 +125,7 @@ public class Chat_Client extends Frame implements ActionListener {
 		scrollpane = new JScrollPane(display);
 		scrollpane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
         scrollpane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-//        scrollpane.setPreferredSize(new Dimension(430, 550));
+        scrollpane.getVerticalScrollBar().setValue(scrollpane.getVerticalScrollBar().getMaximum());
 		display.setEditable(false);
 		display.setLineWrap(true);
         
@@ -139,8 +140,8 @@ public class Chat_Client extends Frame implements ActionListener {
 			// outputStream은 PrintWriter, inputStream은 BufferredReader 
 			sock = new Socket();
 			sock.connect(new InetSocketAddress(ip, 9991));
-			pw = new PrintWriter(new OutputStreamWriter(sock.getOutputStream()));
-			br = new BufferedReader(new InputStreamReader(sock.getInputStream()));
+			pw = new PrintWriter(new OutputStreamWriter(sock.getOutputStream(), "utf-8"));
+			br = new BufferedReader(new InputStreamReader(sock.getInputStream(), "utf-8"));
 
 		} catch (Exception ex) {
 
@@ -188,6 +189,7 @@ public class Chat_Client extends Frame implements ActionListener {
 
 
 	public static void main(String[] args) {
+		
 
 		if (args.length != 1) {
 			
@@ -275,6 +277,8 @@ public class Chat_Client extends Frame implements ActionListener {
 				while ((line = br.readLine()) != null) {
 					toolkit.beep();  // 채팅이 오면 비프음 발생
 					display.append(line + "\n");
+			        scrollpane.getVerticalScrollBar().setValue(scrollpane.getVerticalScrollBar().getMaximum());
+
 				}
 			} catch (Exception ex) {
 				

@@ -111,8 +111,8 @@ public class Chat_Server extends javax.swing.JFrame {
 			this.sock = sock;
 			this.hm = hm;
 			try {
-				PrintWriter pw = new PrintWriter(new OutputStreamWriter(sock.getOutputStream()));
-				br = new BufferedReader(new InputStreamReader(sock.getInputStream()));
+				PrintWriter pw = new PrintWriter(new OutputStreamWriter(sock.getOutputStream(), "utf-8"));
+				br = new BufferedReader(new InputStreamReader(sock.getInputStream(), "utf-8"));
 				id = br.readLine();
 
 				broadcast(id + "님이 접속했습니다.");
