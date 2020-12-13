@@ -9,9 +9,10 @@ import javax.swing.*;
 public class Chat_Client extends Frame implements ActionListener {
 
 	private JTextField idTF = null;
+	private JScrollPane scrollpane = null;
 	private JButton login = null;
-	private TextField input = null;
-	private TextArea display = null;
+	private JTextField input = null;
+	private JTextArea display = null;
 	private CardLayout cardLayout = null;
 	private BufferedReader br = null;
 	private PrintWriter pw = null;
@@ -35,6 +36,7 @@ public class Chat_Client extends Frame implements ActionListener {
 		setLayout(cardLayout);
 //		JPanel loginPanel = new JPanel();
         ImageIcon icon = new ImageIcon(Chat_Client.class.getResource("../img/login.png"));
+        ImageIcon icon2 = new ImageIcon(Chat_Client.class.getResource("../img/chatting.png"));
 
 		JPanel loginPanel = new JPanel() {
             public void paintComponent(Graphics g) {
@@ -72,7 +74,9 @@ public class Chat_Client extends Frame implements ActionListener {
 		login.setBounds(100, 400, 250, 70);
 		login.addActionListener(this); 
 		
-		idTF.setBounds(150, 330, 200, 60);
+		idTF.setBounds(140, 320, 200, 60);
+		Font id_font = new Font("arian", Font.PLAIN, 30);
+		idTF.setFont(id_font);
 		loginPanel.add(idTF);
 		loginPanel.add(login);
 		
@@ -88,16 +92,39 @@ public class Chat_Client extends Frame implements ActionListener {
 		
 		
 		this.add("login", loginPanel);
+		
+		//채팅 창 화면 
 		Panel main = new Panel();
 		main.setLayout(new BorderLayout());
 		
-		input = new TextField();
+		input = new JTextField();
 		input.addActionListener(this);
+		Font input_font = new Font("arian", Font.PLAIN, 30);
+		Font d_font = new Font ("arian", Font.PLAIN, 20);
 		
-		display = new TextArea();
+		input.setFont(input_font);
+		display = new JTextArea() {
+			public void paintComponent(Graphics g) {
+				
+                // Approach 1: Dispaly image at at full size
+                g.drawImage(icon2.getImage(), 0, 0, null);
+                setOpaque(false); //그림을 표시하게 설정,투명하게 조절
+                super.paintComponent(g);
+            }
+		};
+		display.setFont(d_font);
+		display.setForeground(new Color (27, 9, 16));
+		scrollpane = new JScrollPane(display);
+		scrollpane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollpane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+//        scrollpane.setPreferredSize(new Dimension(430, 550));
 		display.setEditable(false);
-		main.add("Center", display);
+		display.setLineWrap(true);
+        
+		
+		main.add("Center", scrollpane);
 		main.add("South", input);
+
 		add("main", main);
 
 		try {

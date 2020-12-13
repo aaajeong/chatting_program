@@ -5,6 +5,7 @@ import java.net.*;
 import java.awt.*;
 import java.util.*;
 import javax.swing.*;
+import java.text.*;
 
 public class Chat_Server extends javax.swing.JFrame {
 	
@@ -12,19 +13,39 @@ public class Chat_Server extends javax.swing.JFrame {
 	private ServerSocket serversock;
     private Socket sock = null;
     private HashMap hm = new HashMap(); 
+    private JScrollPane scrollpane = null;
 
 	public Chat_Server() {
 	
-		
+        ImageIcon icon = new ImageIcon(Chat_Server.class.getResource("../img/server.png"));
+		Font server_font = new Font("arian", Font.PLAIN, 16);
+
+
 		JFrame frame = new JFrame();
-		display = new JTextArea(10, 20);
+		display = new JTextArea(10, 500) {
+			public void paintComponent(Graphics g) {
+                // Approach 1: Dispaly image at at full size
+                g.drawImage(icon.getImage(), 0, 0, null);
+                setOpaque(false); //그림을 표시하게 설정,투명하게 조절
+                super.paintComponent(g);
+            }
+		};
+        display.setFont(server_font);
+        display.setForeground(new Color(9, 251, 211));
 		display.setLineWrap(true);		//행 넘길 때 행의 마지막 단어가 두행에 걸쳐 나뉘지 않도록 하기
 		
+		scrollpane = new JScrollPane(display);
+		scrollpane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollpane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		
+        display.setBackground(Color.darkGray);
+        
 		frame.setTitle("Chat Server");
-		frame.getContentPane().add(display);
+//		frame.getContentPane().add(scrollpane);
+		frame.add(scrollpane);
 		
 		display.setEditable(false);		//실행되면 수정할 수 없음.
-		frame.setSize(500, 300);
+		frame.setSize(500, 500);
 		
 		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);	// close 버튼을 누르면 종료
 		frame.setVisible(true);		//화면에 보이게 
@@ -69,6 +90,12 @@ public class Chat_Server extends javax.swing.JFrame {
 		// 생성
 		public ChatThread(Socket sock, HashMap hm) {
 
+			// 시간 출력 
+			Calendar calendar = Calendar.getInstance();
+			java.util.Date date = calendar.getTime();
+			String today = (new SimpleDateFormat("H:mm:ss").format(date));
+//			System.out.println(today);
+			
 			this.sock = sock;
 			this.hm = hm;
 			try {
