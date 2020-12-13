@@ -116,10 +116,6 @@ public class Chat_Server extends javax.swing.JFrame {
 				id = br.readLine();
 
 				broadcast(id + "님이 접속했습니다.");
-//				toolkit.beep();  // 채팅이 오면 비프음 발생
-//				display.append(today + "    " + "접속한 사용자의 아이디는 " + id + "입니다.");
-//				display.append("\n");
-
 				System.out.println("접속한 사용자의 아이디는 " + id + "입니다.");
 
 				// Thread 동기화 - 한 쓰레드만이 블록 안의 코드에 접근할 수 있다.
@@ -162,9 +158,6 @@ public class Chat_Server extends javax.swing.JFrame {
 				}
 				// 종료한 클라이언트에 대해 나머지 클라이언트에게 메세지 전송 
 				broadcast(id + " 님이 접속 종료했습니다.");
-//				toolkit.beep();  // 채팅이 오면 비프음 발생
-//				display.append(today + "    " + id + " 님이 접속 종료했습니다. ");
-//				display.append("\n");
 				try {
 					if (sock != null)
 						sock.close();
@@ -220,10 +213,4 @@ public class Chat_Server extends javax.swing.JFrame {
 		}
 	}
 
-
-	// Variables declaration - do not modify
-//	private javax.swing.JScrollPane jScrollPane1;
-//	private javax.swing.JButton msg_send;
-//	private javax.swing.JTextField msg_text;
-	// End of variables declaration
 }
