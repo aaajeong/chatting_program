@@ -126,7 +126,7 @@ public class Chat_Client extends Frame implements ActionListener {
 		scrollpane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
         scrollpane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         scrollpane.getVerticalScrollBar().setValue(scrollpane.getVerticalScrollBar().getMaximum());
-		display.setEditable(false);
+        display.setEditable(false);
 		display.setLineWrap(true);
         
 		

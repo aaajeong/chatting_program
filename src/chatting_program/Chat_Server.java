@@ -62,6 +62,8 @@ public class Chat_Server extends javax.swing.JFrame {
             serversock.bind(new InetSocketAddress("192.168.35.97", 9991));
             display.append(" Waiting Connect...");
             display.append("\n");
+	        scrollpane.getVerticalScrollBar().setValue(scrollpane.getVerticalScrollBar().getMaximum());
+
             System.out.println("접속을 기다립니다.");	//콘솔창에 
 
             while(true){
@@ -186,6 +188,7 @@ public class Chat_Server extends javax.swing.JFrame {
 					pw.println(id + "님이 다음의 귓속말을 보내셨습니다. :" + msg2);
 					display.append(today + "    " + id + "님이 다음의 귓속말을 보내셨습니다. :" + msg2);
 					display.append("\n");
+			        scrollpane.getVerticalScrollBar().setValue(scrollpane.getVerticalScrollBar().getMaximum());
 //					toolkit.beep();  // 채팅이 오면 비프음 발생
 					pw.flush();
 				}
@@ -197,6 +200,7 @@ public class Chat_Server extends javax.swing.JFrame {
 		public void broadcast(String msg){
 			
 			display.append(today + "   " + msg + "\n");
+	        scrollpane.getVerticalScrollBar().setValue(scrollpane.getVerticalScrollBar().getMaximum());
 
             synchronized(hm){
                   Collection collection = hm.values();
