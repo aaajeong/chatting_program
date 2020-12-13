@@ -45,14 +45,12 @@ public class Chat_Server extends javax.swing.JFrame {
         display.setBackground(Color.darkGray);
         
 		frame.setTitle("Chat Server");
-//		frame.getContentPane().add(scrollpane);
 		frame.add(scrollpane);
 		
 		display.setEditable(false);		//실행되면 수정할 수 없음.
 		frame.setSize(500, 500);
 		
 		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);	// close 버튼을 누르면 종료
-//		frame.setCursor (customCursor);
 		frame.setVisible(true);		//화면에 보이게 
 		
 		// 서버 소켓 생성하기 

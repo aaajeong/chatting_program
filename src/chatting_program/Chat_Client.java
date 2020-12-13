@@ -21,16 +21,6 @@ public class Chat_Client extends Frame implements ActionListener {
     Toolkit toolkit = Toolkit.getDefaultToolkit();
 
 
-	/*************************************************
-	 * 
-	 * 생성자에서는 접속할 ip를 인자로 전달 받음
-	 * 
-	 * 아이디와 문자열을 입력받기 위해,
-	 * 
-	 * 각 텍스트 필드 idTF와 input에 ActionListner 추가
-	 * 
-	 ************************************************/
-
 	public Chat_Client(String ip) {
 
 		// 컴포넌트 배치 부분
@@ -46,35 +36,21 @@ public class Chat_Client extends Frame implements ActionListener {
 
 		JPanel loginPanel = new JPanel() {
             public void paintComponent(Graphics g) {
-                // Approach 1: Dispaly image at at full size
+
                 g.drawImage(icon.getImage(), 0, 0, null);
-                // Approach 2: Scale image to size of component
-                // Dimension d = getSize();
-                // g.drawImage(icon.getImage(), 0, 0, d.width, d.height, null);
-                // Approach 3: Fix the image position in the scroll pane
-                // Point p = scrollPane.getViewport().getViewPosition();
-                // g.drawImage(icon.getImage(), p.x, p.y, null);
+
                 setOpaque(false); //그림을 표시하게 설정,투명하게 조절
                 super.paintComponent(g);
             }
         };
         
-//        Thread snow = new Thread(loginPanel);
-		
-		
-//		loginPanel.setLayout(new FlowLayout());
+
         loginPanel.setLayout(null);
 		
 		loginPanel.add(new Label("Ip 주소와 ID를 입력하세요"));
 		
-		// ID 입력 패널 
-//		Panel idPanel = new Panel();
-//		Label idLabel = new Label("ID : ");
+
 		idTF = new JTextField(20);		// id 입력 
-//		idLabel.setBounds(200, 30, 50, 50);
-//		idTF.setBounds(260, 500, 50, 50);
-//		idPanel.add(idLabel);
-//		idPanel.add(idTF);
 		idTF.addActionListener(this);
 		
 		// login 버튼 
@@ -157,12 +133,6 @@ public class Chat_Client extends Frame implements ActionListener {
 
 		cardLayout.show(this, "login");
 
-		/*************************************************
-		 * 
-		 * 프레임에 WindowListner 추가 : 윈도우 닫힐 때 이벤트 발생
-		 * 
-		 *************************************************/
-
 		// 윈도우가 종료하면 /quit 메세지를 보내고 socket 종료 
 		addWindowListener(new WindowAdapter() {
 
@@ -201,20 +171,12 @@ public class Chat_Client extends Frame implements ActionListener {
 		new Chat_Client(args[0]);
 	}
 
-	/******************************************************
-	 * 
-	 * ActionEvent를 처리하기 위한 메소드
-	 * 
-	 * idTF에서 id를 입력받거나 문자열을 입력받을 경우 호출되는 메소드
-	 * 
-	 *****************************************************/
 
 	public void actionPerformed(ActionEvent e) {
 
 		// 아이디 입력 창으로부터 아이디를 입력받으면 
 		// 서버로부터 문자열을 받아 TextArea에 추가하는 WinInputThread를 생성한 후 실행 
 		String id = idTF.getText();
-//		String ip = ipTF.getText();
 		
 		if (e.getSource() == idTF || e.getSource() == login) {
 			if (id == null || id.trim().equals("")) {
@@ -231,7 +193,7 @@ public class Chat_Client extends Frame implements ActionListener {
 			WinInputThread wit = new WinInputThread(sock, br);
 			wit.start();
 
-// main 컴포넌트가 보여짐 (채팅 화면이 보여진다.) 
+			// main 컴포넌트가 보여짐 (채팅 화면이 보여진다.) 
 			cardLayout.show(this, "main");
 			input.requestFocus();
 
@@ -254,12 +216,6 @@ public class Chat_Client extends Frame implements ActionListener {
 			input.requestFocus();
 		}
 	}
-
-	/*************************************************************
-	 * 
-	 * 서버로부터 전달된 문자열을 모니터에 출력하는 WinInputThread 객체를 생성
-	 * 
-	 *************************************************************/
 
 	class WinInputThread extends Thread {
 
