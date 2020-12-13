@@ -17,6 +17,8 @@ public class Chat_Client extends Frame implements ActionListener {
 	private BufferedReader br = null;
 	private PrintWriter pw = null;
 	private Socket sock = null;
+    Toolkit toolkit = Toolkit.getDefaultToolkit();
+
 
 	/*************************************************
 	 * 
@@ -37,6 +39,9 @@ public class Chat_Client extends Frame implements ActionListener {
 //		JPanel loginPanel = new JPanel();
         ImageIcon icon = new ImageIcon(Chat_Client.class.getResource("../img/login.png"));
         ImageIcon icon2 = new ImageIcon(Chat_Client.class.getResource("../img/chatting.png"));
+        Image cur_icon = toolkit.getImage("./img/paw.png");
+		Cursor customCursor = toolkit.createCustomCursor(cur_icon , new Point(0, 0), "paw");
+        
 
 		JPanel loginPanel = new JPanel() {
             public void paintComponent(Graphics g) {
@@ -52,6 +57,8 @@ public class Chat_Client extends Frame implements ActionListener {
                 super.paintComponent(g);
             }
         };
+        
+//        Thread snow = new Thread(loginPanel);
 		
 		
 //		loginPanel.setLayout(new FlowLayout());
@@ -142,6 +149,8 @@ public class Chat_Client extends Frame implements ActionListener {
 			System.exit(1);
 
 		}
+
+		this.setCursor (customCursor);
 
 		setSize(440, 700);
 
@@ -264,6 +273,7 @@ public class Chat_Client extends Frame implements ActionListener {
 			try {
 				String line = null;
 				while ((line = br.readLine()) != null) {
+					toolkit.beep();  // 채팅이 오면 비프음 발생
 					display.append(line + "\n");
 				}
 			} catch (Exception ex) {

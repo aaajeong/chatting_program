@@ -14,11 +14,15 @@ public class Chat_Server extends javax.swing.JFrame {
     private Socket sock = null;
     private HashMap hm = new HashMap(); 
     private JScrollPane scrollpane = null;
+    Toolkit toolkit = Toolkit.getDefaultToolkit();
+
 
 	public Chat_Server() {
 	
         ImageIcon icon = new ImageIcon(Chat_Server.class.getResource("../img/server.png"));
 		Font server_font = new Font("arian", Font.PLAIN, 16);
+		Image cur_icon = toolkit.getImage("../img/paw.png");
+		Cursor customCursor = toolkit.createCustomCursor(cur_icon , new Point(0, 8), "img");
 
 
 		JFrame frame = new JFrame();
@@ -48,6 +52,7 @@ public class Chat_Server extends javax.swing.JFrame {
 		frame.setSize(500, 500);
 		
 		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);	// close 버튼을 누르면 종료
+//		frame.setCursor (customCursor);
 		frame.setVisible(true);		//화면에 보이게 
 		
 		// 서버 소켓 생성하기 
@@ -86,6 +91,13 @@ public class Chat_Server extends javax.swing.JFrame {
 		private BufferedReader br;
 		private HashMap hm = new HashMap();
 		private boolean initFlag = false;
+		
+		
+		// 시간 출력 
+		Calendar calendar = Calendar.getInstance();
+		java.util.Date date = calendar.getTime();
+		String today = (new SimpleDateFormat("H:mm:ss").format(date));
+//		System.out.println(today);
 
 		// 생성
 		public ChatThread(Socket sock, HashMap hm) {
@@ -104,8 +116,9 @@ public class Chat_Server extends javax.swing.JFrame {
 				id = br.readLine();
 
 				broadcast(id + "님이 접속했습니다.");
-				display.append("접속한 사용자의 아이디는 " + id + "입니다.");
-				display.append("\n");
+//				toolkit.beep();  // 채팅이 오면 비프음 발생
+//				display.append(today + "    " + "접속한 사용자의 아이디는 " + id + "입니다.");
+//				display.append("\n");
 
 				System.out.println("접속한 사용자의 아이디는 " + id + "입니다.");
 
@@ -149,12 +162,14 @@ public class Chat_Server extends javax.swing.JFrame {
 				}
 				// 종료한 클라이언트에 대해 나머지 클라이언트에게 메세지 전송 
 				broadcast(id + " 님이 접속 종료했습니다.");
-				display.append(id + " 님이 접속 종료했습니다. ");
-				display.append("\n");
+//				toolkit.beep();  // 채팅이 오면 비프음 발생
+//				display.append(today + "    " + id + " 님이 접속 종료했습니다. ");
+//				display.append("\n");
 				try {
 					if (sock != null)
 						sock.close();
 				} catch (Exception ex) {
+					
 				}
 			}
 		}
@@ -176,24 +191,32 @@ public class Chat_Server extends javax.swing.JFrame {
 				if (obj != null) {
 					PrintWriter pw = (PrintWriter) obj;
 					pw.println(id + "님이 다음의 귓속말을 보내셨습니다. :" + msg2);
+					display.append(today + "    " + id + "님이 다음의 귓속말을 보내셨습니다. :" + msg2);
+					display.append("\n");
+//					toolkit.beep();  // 채팅이 오면 비프음 발생
 					pw.flush();
 				}
 			}
+			
 		}
 		
 		// 접속한 모든 클라이언트에게 메세지 전송  
 		public void broadcast(String msg){
+			
+			display.append(today + "   " + msg + "\n");
 
             synchronized(hm){
                   Collection collection = hm.values();
                   Iterator iter = collection.iterator();
 
                   while(iter.hasNext()){
+                	  
                          PrintWriter pw = (PrintWriter)iter.next();
                          pw.println(msg);
                          pw.flush();
                   }
             }
+
 		}
 	}
 
